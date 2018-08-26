@@ -1,10 +1,15 @@
+<?php
+
+include('session.php');
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>Shop</title>
+      <title>Shinga</title>
       <link rel="stylesheet" href="style.css">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -26,9 +31,9 @@
                         <div class="menu">
                               <ul>
                                     <li><a href="#">Home</a></li>
-                                    <li><a href="#">About</a></li>
-                              <!--       <li><a href="#">Shop</a></li> -->
-                                    <li><a href="#">Contact</a></li>
+                                    <li><a href="manage-orders.php">Manage Orders</a></li>
+                                    <li><a href="manage-products.php">Manage products</a></li>
+                                    <li><a href="logout.php">Logout</a></li>
                               </ul>
                         </div>
                   </nav>

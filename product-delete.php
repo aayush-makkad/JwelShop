@@ -1,29 +1,30 @@
 <?php
-include("config.php");
+
+include('session.php');
+
 ?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-      <meta charset="UTF-8">
+      <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+     <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>Shop</title>
+      <title>Shinga</title>
       <link rel="stylesheet" href="style.css">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-      <link rel="stylesheet" type="text/css" href="shopstyle.css">
       <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-      <script src="onclickhandler.js"></script>
-      <script type="text/javascript">
-            function clicked(item) {
-                  window.location.href = "details.php?id="+($(item).attr("value"));
-  //  alert($(item).attr("value"));
-   }
-      </script>
 </head>
 <body>
       <div class="wrapper">
             <header>
 
-                  <nav>
+                  <nav style="z-index: 1;">
 
                         <div class="menu-icon">
                               <i class="fa fa-bars fa-2x"></i>
@@ -36,38 +37,37 @@ include("config.php");
                         <div class="menu">
                               <ul>
                                     <li><a href="#">Home</a></li>
-                                    <li><a href="#">About</a></li>
-                              <!--       <li><a href="#">Shop</a></li> -->
-                                    <li><a href="#">Contact</a></li>
+                                    <li><a href="manage-orders.php">Manage Orders</a></li>
+                                    <li><a href="manage-products.php">Manage products</a></li>
+                                    <li><a href="logout.php">Logout</a></li>
                               </ul>
                         </div>
                   </nav>
 
             </header>
 
-            <div class="content">
-                 <?php
+            <div class="content" style="text-align: center;">
+
+             
+                              <?php
 
   //  $sql = $pdo->query("SELECT * FROM first")->fetchall(PDO::FETCH_ASSOC);
                  $query=mysqli_query($db,"SELECT * from first") or die(mysqli_error($db));
     foreach($query as $row):?>
-<div class="product">
-<div onclick = "clicked(this);"class="product-image" value = <?php echo $row['id'];?> >
- <img src="<?php echo $row['url'];?>" alt=" "  style="max-width: 1100px; max-height: 325;"  class="img-responsive"/>
-</div>
-<div>
- <p><b> Name : <?php echo $row['name'];?></b></p>
-<!--   <span> from people near you. </span> -->
-</div>
-<div>
- <p><i class="item_price"> Price : <?php echo $row['price'];?></i></p>
-<!--   <span> from people near you. </span> -->
-</div>
-<br>
-<br><br>
-</div>
 
-<?php
+                  <!-- <h2>Delete Product</h2> -->
+                  <div onclick = "clicked(this);" class="product-image" value = <?php echo $row['id'];?> >
+  <div class="card" style="width:400px; text-align: center; display: table; margin: 0 auto;">
+    <img class="card-img-top" src="<?php echo $row['url'];?>" alt="Card image" style="width:100%">
+    <div class="card-body">
+      <h4 class="card-title"><?php echo $row['name'];?></h4>
+      <p class="card-text">Price : <?php echo $row['price'];?></p>
+      <a href="final-delete.php?id=<?php echo $row['id'];?>" class="btn btn-primary">Delete</a>
+    </div>
+  </div>
+  <br>
+
+  <?php
 
     endforeach;
 ?>
@@ -97,17 +97,7 @@ include("config.php");
       })
 
 
-      function clickhandle(id){
-
-     
-
-
-}
-
-
-
       </script>
-   <!--  <div class="footer"><p>hey7y7</p></div> -->
 
 </body>
 </html>

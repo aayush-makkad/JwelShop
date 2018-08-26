@@ -1,12 +1,20 @@
 <?php
-include('config.php');
-$id = $_REQUEST['id'];
-
-
-
-
+include('session.php');
+$id = mysqli_real_escape_string($db,$_REQUEST['id']);
+$sql = "select * from orders where id = $id";
+$result = mysqli_query($db,$sql);
+while($row = $result->fetch_assoc()) {
+$first_name = $row['first_name'];
+$last_name = $row['last_name'];
+$address = $row['address'];
+$phone = $row['phone'];
+$item = $row['item_name'];
+$mail = $row['mail'];
+if($mail === NULL){
+	$mail = "N/A";
+	}
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,30 +22,51 @@ $id = $_REQUEST['id'];
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
       <title>Shinga</title>
-      <link rel="stylesheet" href="style2.css">
+      <link rel="stylesheet" href="style.css">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
       <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-      <link rel="stylesheet" type="text/css" href="detailsstyle.css">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="buynowstyle.css">
-  <script type="text/javascript">
-    function buy(id){
+      <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="manage-orders-style.css">
+      <script>
+      
 
-      window.location.href = "buynow.php?id="+id;
 
-    }
 
-  </script>
+      $(document).ready(function() {
+           $('#myform').submit(function() {
+           		printDiv();
+           		return true;
+			});
+      });
+
+
+
+      	function printDiv() 
+{
+
+  var divToPrint=document.getElementById('DivIdToPrint');
+
+  var newWin=window.open('','Print-Window');
+
+  newWin.document.open();
+
+  newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+  newWin.document.close();
+
+  setTimeout(function(){newWin.close();},10);
+
+}
+</script>
 </head>
 <body>
       <div class="wrapper">
-      	<?php $query=mysqli_query($db,"SELECT url from first where id = $id") or die(mysqli_error($db));
-      	foreach($query as $row):?>
-            <header style="background: url(<?php echo $row['url'];?>); background-repeat: no-repeat; background-position: center; ">
+            <header>
 
                   <nav>
 
@@ -52,20 +81,15 @@ $id = $_REQUEST['id'];
                         <div class="menu">
                               <ul>
                                     <li><a href="#">Home</a></li>
-                                    <li><a href="#">About</a></li>
-                                    <li><a href="shop.php">Shop</a></li>
-                                    <li><a href="#">Contact</a></li>
+                                    <li><a href="manage-orders.php">Manage Orders</a></li>
+                                    <li><a href="shop.php">Manage products</a></li>
+                                    <li><a href="logout.php">Logout</a></li>
                               </ul>
                         </div>
                   </nav>
 
             </header>
-            <?php
-
-    endforeach;
-?>
-</div>
-<div class="form_wrap">
+            <div class="form_wrap">
 <!-- Material form register -->
 <div class="card">
 
@@ -74,23 +98,23 @@ $id = $_REQUEST['id'];
     </h5>
 
     <!--Card content-->
-    <div class="card-body px-lg-5 pt-0">
+    <div class="card-body px-lg-5 pt-0" id='DivIdToPrint'>
 
         <!-- Form -->
-        <form class="text-center" style="color: #757575;" action="purchased.php?">
+        <form class="text-center" style="color: #757575;" action="process-order.php?" id="myform" >
         	<input type="hidden" name="id" value="<?php echo $id; ?>">
             <div class="form-row">
                 <div class="col">
                     <!-- First name -->
                     <div class="md-form">
-                        <input type="text" id="materialRegisterFormFirstName" class="form-control" name="first_name">
+                        <input type="text" id="materialRegisterFormFirstName" class="form-control" name="first_name" value=<?php echo $first_name; ?> readonly>
                         <label for="materialRegisterFormFirstName">First name</label>
                     </div>
                 </div>
                 <div class="col">
                     <!-- Last name -->
                     <div class="md-form">
-                        <input type="text" id="materialRegisterFormLastName" class="form-control" name="last_name">
+                        <input type="text" id="materialRegisterFormLastName" class="form-control" name="last_name" value=<?php echo $last_name; ?> readonly>
                         <label for="materialRegisterFormLastName">Last name</label>
                     </div>
                 </div>
@@ -98,13 +122,13 @@ $id = $_REQUEST['id'];
 
             <!-- E-mail -->
             <div class="md-form mt-0">
-                <input type="email" id="materialRegisterFormEmail" class="form-control" name="email" required>
+                <input type="email" id="materialRegisterFormEmail" class="form-control" name="email" value=<?php echo $mail;?> readonly>
                 <label for="materialRegisterFormEmail">E-mail</label>
             </div>
 
             <!-- Password -->
             <div class="md-form">
-                <input type="text" id="materialRegisterFormPassword" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock" name="address" required>
+                <input type="text" id="materialRegisterFormPassword" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock" name="address" required value=<?php echo $address; ?> readonly>
                 <label for="materialRegisterFormPassword">Address</label>
                 <!-- <small id="materialRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
                     At least 8 characters and 1 digit
@@ -113,12 +137,21 @@ $id = $_REQUEST['id'];
 
             <!-- Phone number -->
             <div class="md-form">
-                <input type="text" id="materialRegisterFormPhone" class="form-control" aria-describedby="materialRegisterFormPhoneHelpBlock" name="phone" required>
+                <input type="text" id="materialRegisterFormPhone" class="form-control" aria-describedby="materialRegisterFormPhoneHelpBlock" name="phone" required value=<?php echo $phone;?> readonly>
                 <label for="materialRegisterFormPhone">Phone number</label>
                <!--  <small id="materialRegisterFormPhoneHelpBlock" class="form-text text-muted mb-4">
                     Optional - for two step authentication
                 </small> -->
             </div>
+
+            <div class="md-form">
+                <input type="text" id="materialRegisterFormPhone" class="form-control" aria-describedby="materialRegisterFormPhoneHelpBlock" name="item" required value = <?php echo $item; ?> readonly>
+                <label for="materialRegisterFormPhone">Item name</label>
+               <!--  <small id="materialRegisterFormPhoneHelpBlock" class="form-text text-muted mb-4">
+                    Optional - for two step authentication
+                </small> -->
+            </div>
+
 
             <!-- Newsletter -->
             <!-- <div class="form-check">
@@ -127,7 +160,7 @@ $id = $_REQUEST['id'];
             </div> -->
 
             <!-- Sign up button -->
-            <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Buy</button>
+            <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Process and Print</button>
 
             <!-- Social register -->
             <p>or sign up with:</p>
@@ -161,30 +194,6 @@ $id = $_REQUEST['id'];
 </div>
 <!-- Material form register -->
 </div>
-  <script type="text/javascript">
-
-      // Menu-toggle button
-
-      $(document).ready(function() {
-            $(".menu-icon").on("click", function() {
-                  $("nav ul").toggleClass("showing");
-            });
-      });
-
-      // Scrolling Effect
-
-      $(window).on("scroll", function() {
-            if($(window).scrollTop()) {
-                  $('nav').addClass('black');
-            }
-
-            else {
-                  $('nav').removeClass('black');
-            }
-      })
-
-
-      </script>
-
+<button value="pdf" onclick="pdfgen();"></button>
 </body>
 </html>

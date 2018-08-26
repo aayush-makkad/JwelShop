@@ -4,6 +4,8 @@ $first_name = mysqli_real_escape_string($db,$_REQUEST['first_name']);
 $last_name = mysqli_real_escape_string($db,$_REQUEST['last_name']); 
 $address = mysqli_real_escape_string($db,$_REQUEST['address']);
 $phone = mysqli_real_escape_string($db,$_REQUEST['phone']); 
+$mail = mysqli_real_escape_string($db,$_REQUEST['email']); 
+
 //$first_name = $_REQUEST['first_name'];
 // $last_name =  $_REQUEST['last_name'];
 // $address = $_REQUEST['address'];
@@ -13,8 +15,8 @@ $query1=mysqli_query($db,"SELECT name from first where id = $id") or die(mysqli_
       	foreach($query1 as $row):
       		$item = $row['name'];
       	 endforeach;
-$query=$db->prepare("INSERT INTO `orders`(`item_id`, `item_name`, `first_name`, `last_name`, `address`, `phone`) VALUES (?,?,?,?,?,?)");
-$query->bind_param("isssss",$id,$item,$first_name,$last_name,$address,$phone);
+$query=$db->prepare("INSERT INTO `orders`(`item_id`, `item_name`, `first_name`, `last_name`, `address`, `phone`, `mail`) VALUES (?,?,?,?,?,?,?)");
+$query->bind_param("issssss",$id,$item,$first_name,$last_name,$address,$phone,$mail);
 $query->execute();
 
 ?>
